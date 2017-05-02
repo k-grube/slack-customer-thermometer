@@ -1,0 +1,79 @@
+{
+  "extends": "standard",
+  "env": {
+    "browser": true,
+    "node": true,
+    "mocha": true,
+    "es6": true
+  },
+  "rules": {
+    "no-console": "off",
+    "no-alert": "off",
+    "no-unused-vars": 0,
+    "space-before-function-paren": 0,
+    "object-curly-spacing": 0,
+    "arrow-body-style": 0,
+    "linebreak-style": 0,
+    "consistent-return": "off",
+    "no-param-reassign": "off",
+    "prefer-template": "warn",
+    "global-require": "off",
+    "no-case-declarations": "off",
+    "no-underscore-dangle": "off",
+    "no-shadow": [
+      "error",
+      {
+        "allow": [
+          "then",
+          "catch",
+          "done"
+        ]
+      }
+    ],
+    "max-len": [
+      "error",
+      120
+    ],
+    // use ide formatting
+    "indent": [
+      2,
+      2,
+      {
+        "SwitchCase": 1
+      }
+    ],
+    "quotes": [
+      2,
+      "single"
+    ],
+    "new-cap": 0,
+    "no-prototype-builtins": 0,
+    "no-restricted-syntax": [
+      "error",
+      "WithStatement"
+    ],
+    "no-use-before-define": [
+      "error",
+      {
+        "functions": false,
+        "classes": true
+      }
+    ]
+  },
+  "parser": "babel-eslint",
+  "parserOptions": {
+    "sourceType": "module"
+  },
+  "settings": {
+    "import/resolve": {
+      "moduleDirectory": [
+        "node_modules",
+        "src"
+      ]
+    }
+  },
+  "globals": {
+    "__DEVELOPMENT__": true,
+    "__SERVER__": true
+  }
+}

@@ -1,0 +1,67 @@
+{
+  "name": "cw-micro",
+  "version": "0.0.1",
+  "description": "An express based microservice for proxying to the ConnectWise API.",
+  "keywords": [
+    "connectwise", "connectwise manage", "rest api", "PSA"
+  ],
+  "author": {
+    "name": "Kevin Grube",
+    "email": "grube.kevin@gamil.com"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/k-grube/cw-micro.git"
+  },
+  "main": "bin/api.js",
+  "scripts": {
+    "start": "better-npm-run start",
+    "dev": "better-npm-run dev"
+  },
+  "betterScripts": {
+    "start": {
+      "command": "node ./bin/api",
+      "env": {
+        "NODE_ENV": "production"
+      }
+    },
+    "dev": {
+      "command": "node ./bin/api",
+      "env": {
+        "NODE_ENV": "development"
+      }
+    }
+  },
+  "dependencies": {
+    "babel-core": "^6.24.1",
+    "babel-plugin-transform-runtime": "^6.23.0",
+    "babel-preset-es2015": "^6.24.1",
+    "babel-preset-stage-0": "^6.24.1",
+    "babel-register": "^6.24.1",
+    "basic-auth": "^1.1.0",
+    "body-parser": "~1.17.1",
+    "connectwise-rest": "github:covenanttechnologysolutions/connectwise-rest",
+    "dotenv": "^4.0.0",
+    "errorhandler": "^1.5.0",
+    "express": "~4.15.2",
+    "express-validator": "^3.2.0",
+    "morgan": "~1.8.1",
+    "piping": "^1.0.0-rc.4",
+    "pmx": "^1.2.0",
+    "promise-retry": "^1.1.1",
+    "request": "^2.81.0"
+  },
+  "engines": {
+    "node": ">=4.0.0"
+  },
+  "devDependencies": {
+    "better-npm-run": "0.0.15",
+    "eslint": "^3.19.0",
+    "eslint-config-standard": "^10.2.1",
+    "eslint-plugin-import": "^2.2.0",
+    "eslint-plugin-node": "^4.2.2",
+    "eslint-plugin-promise": "^3.5.0",
+    "eslint-plugin-standard": "^3.0.1"
+  }
+}

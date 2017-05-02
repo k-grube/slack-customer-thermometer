@@ -1,0 +1,6 @@
+{
+  "name": "cw-micro",
+  "description": "Sample Express based app that will proxy requests from the ConnectWise Manage API.",
+  "repository": "https://github.com/k-grube/cw-micro.git",
+  "keywords": ["connectwise", "connectwise manage", "rest api", "PSA"]
+}
