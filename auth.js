@@ -2,37 +2,22 @@
  * Created by kgrube on 5/2/2017.
  */
 const basicAuth = require('basic-auth');
-const request = require('request');
 
-exports.checkMemberCredentials = (req, res, next) => {
-  // decode basic auth
-  const authorization = basicAuth(req);
-  request.post({
-    url: `https://${process.env.CW_COMPANY_URL}/v4_6_release/login/login.aspx?response=json`,
-    form: {
-      CompanyName: process.env.CW_COMPANY_ID,
-      UserName: authorization.name,
-      Password: authorization.pass,
-      ChkSharedComputer: false,
-    },
-  }, (err, response, body) => {
-    if (err) {
-      return next(err);
-    }
+const {CS_USERNAME, CS_PASSWORD} = process.env;
 
-    let parsed = {};
-    try {
-      parsed = JSON.parse(body);
-    } catch (parseError) {
-      // CW server returned jibberish
-      return next(parseError);
-    }
+exports.checkAuth = (req, res, next) => {
+  let name, pass;
+  try {
+    const basic = basicAuth(req);
+    name = basic.name;
+    pass = basic.pass;
+  } catch (err) {
+    return res.status(401).json({error: 'Authentication failure.'});
+  }
 
-    // successful login
-    if (parsed.Success) {
-      return next();
-    }
-    // send client error message
-    res.status(401).json(parsed);
-  });
+  if (name === CS_USERNAME && pass === CS_PASSWORD) {
+    return next();
+  }
+
+  res.status(401).json({error: 'Authentication failure.'});
 };

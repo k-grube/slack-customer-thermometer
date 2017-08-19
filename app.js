@@ -42,8 +42,7 @@ app.use(expressValidator({
  */
 app.set('trust proxy', process.env.TRUST_PROXY === 1 ? 1 : 0);
 
-app.use(auth.checkMemberCredentials);
-
+app.use(auth.checkAuth);
 
 // routes
 const routes = require('./routes');
@@ -69,7 +68,6 @@ const runnable = app.listen(port, err => {
 
   console.log('\t==> 👌 Listening on https://%s:%s/', host, port);
 });
-
 
 process.on('unhandledRejection', reason => console.error('UnhandledRejection', reason, new Error('UnhandledRejection').stack));
 
