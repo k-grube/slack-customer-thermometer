@@ -7,6 +7,8 @@
     "es6": true
   },
   "rules": {
+    "semi": ["error", "always"],
+    "comma-dangle": ["error", "only-multiline"],
     "no-console": "off",
     "no-alert": "off",
     "no-unused-vars": 0,
@@ -21,40 +23,31 @@
     "no-case-declarations": "off",
     "no-underscore-dangle": "off",
     "no-shadow": [
-      "error",
-      {
+      "error", {
         "allow": [
-          "then",
-          "catch",
-          "done"
+          "then", "catch", "done"
         ]
       }
     ],
     "max-len": [
-      "error",
-      120
+      "error", 120
     ],
     // use ide formatting
     "indent": [
-      2,
-      2,
-      {
+      2, 2, {
         "SwitchCase": 1
       }
     ],
     "quotes": [
-      2,
-      "single"
+      2, "single"
     ],
     "new-cap": 0,
     "no-prototype-builtins": 0,
     "no-restricted-syntax": [
-      "error",
-      "WithStatement"
+      "error", "WithStatement"
     ],
     "no-use-before-define": [
-      "error",
-      {
+      "error", {
         "functions": false,
         "classes": true
       }
@@ -67,8 +60,7 @@
   "settings": {
     "import/resolve": {
       "moduleDirectory": [
-        "node_modules",
-        "src"
+        "node_modules", "src"
       ]
     }
   },

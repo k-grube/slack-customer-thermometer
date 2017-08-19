@@ -1,0 +1,12 @@
+[
+  {
+    "name": "Thermometer/Blast Name",
+    "type": "thermometer or blast",
+    "slack_channel": "channel name to post results, e.g. #general"
+  },
+  {
+    "name": "additional thermometer or blasts",
+    "type": "thermometer or blast",
+    "slack_channel": "channel name to post results, e.g. #general"
+  }
+]
