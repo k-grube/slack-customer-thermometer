@@ -109,7 +109,6 @@ router.post('/api/customer-thermometer/:type/:name', (req, res, next) => {
       }
 
       console.info(`Posting Slack message to #${configSlackChannel} for ${name}.`);
-      console.info('response color:', responseColor);
 
       const message = {
         mrkdwn: true,
