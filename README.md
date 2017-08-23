@@ -1,6 +1,9 @@
 # slack-customer-thermometer
 This is a sample Express based app that will proxy requests from Customer Thermometer to Slack.
 
+Sample incoming webhook:
+![Sample Image](http://i.imgur.com/L0mYCoO.png)
+
 ## Heroku Setup
 
 [![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy)
@@ -10,6 +13,7 @@ This is a sample Express based app that will proxy requests from Customer Thermo
 - Navigate to Settings
 - Edit the config vars specified in .env.example
     - SLACK_API_TOKEN
+        - Get your API token from [here](https://api.slack.com/custom-integrations/legacy-tokens).
     - CS_USERNAME
     - CS_PASSWORD
 - Create a config.json that contains the mappings between Blasts/Thermometers to Slack channels using Heroku Toolbelt. 

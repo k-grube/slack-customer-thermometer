@@ -2,6 +2,10 @@ const express = require('express');
 const router = express.Router();
 const WebClient = require('@slack/client').WebClient;
 const find = require('lodash').find;
+const findIndex = require('lodash').findIndex;
+
+const defaultColors = ["#B17657", "#66CC33", "#FFB40D", "#CC3333"];
+const responseTypes = ['Gold', 'Green', 'Yellow', 'Red'];
 
 let config;
 try {
@@ -21,6 +25,7 @@ if (!token) {
 const slack = new WebClient(token);
 
 router.post('/api/customer-thermometer/:type/:name', (req, res, next) => {
+  // destruct webhook object
   const {
     event_id,
     blast_name,
@@ -32,7 +37,7 @@ router.post('/api/customer-thermometer/:type/:name', (req, res, next) => {
     temperature_id,
     response_date,
     response_delay,
-    respnse_icon,
+    response_icon,
     recipient,
     first_name,
     last_name,
@@ -52,6 +57,8 @@ router.post('/api/customer-thermometer/:type/:name', (req, res, next) => {
     country,
     user_agent,
   } = req.body;
+
+  const responseIconUrl = response_icon.match(/((http|https).*?)"/)[1];
 
   const {type, name} = req.params;
 
@@ -79,6 +86,12 @@ router.post('/api/customer-thermometer/:type/:name', (req, res, next) => {
     })
     .then(info => {
       const metricConfig = find(config, {name});
+      let responseColor;
+      if (metricConfig.colors) {
+        responseColor = metricConfig.colors[findIndex(responseTypes, el => el === response)];
+      } else {
+        responseColor = defaultColors[findIndex(responseTypes, el => el === response)];
+      }
 
       if (!metricConfig) {
         console.error('No configuration found matching that metric name.');
@@ -96,11 +109,47 @@ router.post('/api/customer-thermometer/:type/:name', (req, res, next) => {
       }
 
       console.info(`Posting Slack message to #${configSlackChannel} for ${name}.`);
+      console.info('response color:', responseColor);
+
+      const message = {
+        mrkdwn: true,
+        username: 'Customer Thermometer',
+        response_type: 'in_channel',
+        as_user: false,
+        icon_url: 'https://app.customerthermometer.com/images/favicon-196x196.png',
+        attachments: [{
+          fallback: `New ${type} response ${response} from ${first_name} ${last_name} at ${company}.`,
+          thumb_url: responseIconUrl,
+          color: responseColor,
+          fields: [
+            {
+              title: 'Company',
+              value: company,
+              short: true,
+            },
+            {
+              title: 'Recipient',
+              value: recipient,
+              short: true,
+            },
+            {
+              title: type === 'thermometer' ? 'Thermometer' : 'Blast',
+              value: type === 'thermometer' ? thermometer_name : blast_name,
+              short: true,
+            },
+            {
+              title: 'Comment',
+              value: comment,
+              short: false,
+            },
+          ],
+        }],
+      };
 
       slack.chat.postMessage(
         slackChannelDefinition.id,
-        `New ${type} response ${response} from ${first_name} ${last_name} at ${company}.`,
-        {username: 'CustomerThermometer'},
+        `New ${type} response *${response}* from ${first_name} ${last_name}.`,
+        message,
         (err, header, statusCode, body) => {
           if (err) {
             // do something
