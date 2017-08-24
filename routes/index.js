@@ -1,15 +1,17 @@
+/* eslint-disable camelcase */
 const express = require('express');
 const router = express.Router();
 const WebClient = require('@slack/client').WebClient;
 const find = require('lodash').find;
 const findIndex = require('lodash').findIndex;
+const path = require('path');
 
-const defaultColors = ["#B17657", "#66CC33", "#FFB40D", "#CC3333"];
+const defaultColors = ['#B17657', '#66CC33', '#FFB40D', '#CC3333'];
 const responseTypes = ['Gold', 'Green', 'Yellow', 'Red'];
 
 let config;
 try {
-  config = require('../config.json');
+  config = require(path.join(__dirname, '../config.json'));
 } catch (err) {
   console.error('ERROR: error loading your config.json.');
   console.error(err);
