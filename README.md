@@ -15,7 +15,9 @@ Sample incoming webhook:
     - SLACK_API_TOKEN
         - Get your API token from [here](https://api.slack.com/custom-integrations/legacy-tokens).
     - CS_USERNAME
+      - You should randomly generate, this is so that only your thermometers can post to this bot.
     - CS_PASSWORD
+      - You should randomly generate, this is so that only your thermometers can post to this bot.
     - CS_CONFIG
         - Stringify the JSON in config.example.json modified for your thermometers.
 
