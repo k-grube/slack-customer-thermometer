@@ -16,7 +16,8 @@ Sample incoming webhook:
         - Get your API token from [here](https://api.slack.com/custom-integrations/legacy-tokens).
     - CS_USERNAME
     - CS_PASSWORD
-- Create a config.json that contains the mappings between Blasts/Thermometers to Slack channels using Heroku Toolbelt. 
+    - CS_CONFIG
+        - Stringify the JSON in config.example.json modified for your thermometers.
 
 ## Local Setup
 

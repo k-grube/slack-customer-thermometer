@@ -9,11 +9,12 @@ const path = require('path');
 const defaultColors = ['#B17657', '#66CC33', '#FFB40D', '#CC3333'];
 const responseTypes = ['Gold', 'Green', 'Yellow', 'Red'];
 
+// yes i know this is dumb, but heroku won't load a manually created config file.
 let config;
 try {
-  config = require(path.join(__dirname, '../config.json'));
+  config = JSON.parse(process.env.CS_CONFIG);
 } catch (err) {
-  console.error('ERROR: error loading your config.json.');
+  console.error('ERROR: error loading your CS_CONFIG var.');
   console.error(err);
   process.exit(1);
 }
