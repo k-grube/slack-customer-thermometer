@@ -27,7 +27,7 @@ if (!token) {
 
 const slack = new WebClient(token);
 
-router.post('/api/customer-thermometer/:type/:name', (req, res, next) => {
+router.post('/api/customer-thermometer', (req, res, next) => {
   // destruct webhook object
   const {
     event_id,
@@ -63,7 +63,14 @@ router.post('/api/customer-thermometer/:type/:name', (req, res, next) => {
 
   const responseIconUrl = response_icon.match(/((http|https).*?)"/)[1];
 
-  const {type, name} = req.params;
+  let name = thermometer_name;
+  let type = 'thermometer';
+  if (blast_name) {
+    type = 'blast';
+  }
+  if (type === 'blast') {
+    name = blast_name;
+  }
 
   return new Promise((resolve, reject) => {
     slack.channels.list((err, info) => {
