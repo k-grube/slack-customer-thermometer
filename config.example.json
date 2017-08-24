@@ -14,7 +14,11 @@
       "Green": "Good",
       "Yellow": "Needs Improvement",
       "Red": "Not Good"
-    }
+    },
+    "limitResponses": [
+      "Gold",
+      "Green"
+    ]
   },
   {
     "name": "additional thermometer or blasts",
@@ -31,6 +35,11 @@
       "Green": "Good",
       "Yellow": "Needs Improvement",
       "Red": "Not Good"
-    }
+    },
+    "limitResponses": [
+      "Gold",
+      "Green",
+      "Yellow"
+    ]
   }
 ]

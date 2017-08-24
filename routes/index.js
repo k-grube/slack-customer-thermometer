@@ -137,13 +137,25 @@ router.post('/api/customer-thermometer', (req, res, next) => {
         return;
       }
 
+      let limitResponse = false;
+      if (metricConfig.limitResponses && metricConfig.limitResponses.length > 0) {
+        // search config array for the response type
+        // if it's not found, do not post slack message
+        if (findIndex(metricConfig.limitResponses, el => el === response) === -1) {
+          limitResponse = true;
+        }
+      }
+
+      if (limitResponse) {
+        res.status(200).end();
+        return;
+      }
+
       let responseColor;
       if (metricConfig.colors) {
-        responseColor = metricConfig.colors[findIndex(responseTypes,
-          el => el === response)];
+        responseColor = metricConfig.colors[findIndex(responseTypes, el => el === response)];
       } else {
-        responseColor = defaultColors[findIndex(responseTypes,
-          el => el === response)];
+        responseColor = defaultColors[findIndex(responseTypes, el => el === response)];
       }
 
       let responseRating;
