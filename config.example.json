@@ -8,7 +8,13 @@
       "#66CC33",
       "#FFB40D",
       "#CC3333"
-    ]
+    ],
+    "ratings": {
+      "Gold": "Excellent",
+      "Green": "Good",
+      "Yellow": "Needs Improvement",
+      "Red": "Not Good"
+    }
   },
   {
     "name": "additional thermometer or blasts",
@@ -19,6 +25,12 @@
       "#66CC33",
       "#FFB40D",
       "#CC3333"
-    ]
+    ],
+    "ratings": {
+      "Gold": "Excellent",
+      "Green": "Good",
+      "Yellow": "Needs Improvement",
+      "Red": "Not Good"
+    }
   }
 ]
