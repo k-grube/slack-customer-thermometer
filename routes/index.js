@@ -197,7 +197,7 @@ router.post('/api/customer-thermometer', (req, res, next) => {
       };
 
       if (ticketId && CW_COMPANY_URL) {
-        message.attachments.fields.push({
+        message.attachments[0].fields.push({
           title: 'Ticket',
           /* eslint-disable max-len */
           value: `<https://${CW_COMPANY_URL}/v4_6_release/services/system_io/router/openrecord.rails?locale=en_US&companyName=${CW_COMPANY_ID}&recordType=ServiceFV&recid=${ticketId}|#${ticketId}>`,
@@ -206,7 +206,7 @@ router.post('/api/customer-thermometer', (req, res, next) => {
       }
 
       if (comment && comment.length > 0) {
-        message.attachments.fields.push({
+        message.attachments[0].fields.push({
           title: 'Comment',
           value: comment,
           short: false,
