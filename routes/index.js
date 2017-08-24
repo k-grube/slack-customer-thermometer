@@ -68,6 +68,8 @@ router.post('/api/customer-thermometer', (req, res, next) => {
     return;
   }
 
+  console.info('Webhook Payload', JSON.stringify(req.body));
+
   let name = thermometer_name;
   let type = 'thermometer';
   if (blast_name) {
@@ -103,7 +105,7 @@ router.post('/api/customer-thermometer', (req, res, next) => {
       const metricConfig = find(config, {name});
 
       if (!metricConfig) {
-        console.error('No configuration found matching that metric name.');
+        console.error(`No configuration found matching the metric name: ${name}`);
         res.status(500).json({msg: 'No configuration found matching that metric name.'});
         return;
       }
