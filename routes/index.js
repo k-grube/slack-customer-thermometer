@@ -63,6 +63,11 @@ router.post('/api/customer-thermometer', (req, res, next) => {
 
   const responseIconUrl = response_icon.match(/((http|https).*?)"/)[1];
 
+  if (blast_name === 'Your blast name' && thermometer_name === 'Your thermometer name') {
+    res.status(200).json({msg: 'ok'});
+    return;
+  }
+
   let name = thermometer_name;
   let type = 'thermometer';
   if (blast_name) {
@@ -96,17 +101,18 @@ router.post('/api/customer-thermometer', (req, res, next) => {
     })
     .then(info => {
       const metricConfig = find(config, {name});
-      let responseColor;
-      if (metricConfig.colors) {
-        responseColor = metricConfig.colors[findIndex(responseTypes, el => el === response)];
-      } else {
-        responseColor = defaultColors[findIndex(responseTypes, el => el === response)];
-      }
 
       if (!metricConfig) {
         console.error('No configuration found matching that metric name.');
         res.status(500).json({msg: 'No configuration found matching that metric name.'});
         return;
+      }
+
+      let responseColor;
+      if (metricConfig.colors) {
+        responseColor = metricConfig.colors[findIndex(responseTypes, el => el === response)];
+      } else {
+        responseColor = defaultColors[findIndex(responseTypes, el => el === response)];
       }
 
       const configSlackChannel = metricConfig.slack_channel.replace(/#/g, '');
