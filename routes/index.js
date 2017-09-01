@@ -102,6 +102,11 @@ router.post('/api/customer-thermometer', (req, res, next) => {
     ticketId = customFields[process.env.CS_TICKET_CUSTOM_NUMBER];
   }
 
+  let tech;
+  if (!isNaN(process.env.CS_TICKET_TECH_NUMBER)) {
+    tech = customFields[process.env.CS_TICKET_TECH_NUMBER];
+  }
+
   return new Promise((resolve, reject) => {
     slack.channels.list((err, info) => {
       if (err) {
@@ -213,6 +218,14 @@ router.post('/api/customer-thermometer', (req, res, next) => {
           title: 'Ticket',
           /* eslint-disable max-len */
           value: `<https://${CW_COMPANY_URL}/v4_6_release/services/system_io/router/openrecord.rails?locale=en_US&companyName=${CW_COMPANY_ID}&recordType=ServiceFV&recid=${ticketId}|#${ticketId}>`,
+          short: true,
+        });
+      }
+
+      if (tech) {
+        message.attachments[0].fields.push({
+          title: 'Tech',
+          value: tech,
           short: true,
         });
       }
