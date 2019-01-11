@@ -18,7 +18,12 @@
     "limitResponses": [
       "Gold",
       "Green"
-    ]
+    ],
+    "notification": {
+      "enabled": false,
+      "sendResponses": ["Red", "Yellow"],
+      "board_name": "Your Review Board"
+    }
   },
   {
     "name": "additional thermometer or blasts",
@@ -40,6 +45,11 @@
       "Gold",
       "Green",
       "Yellow"
-    ]
+    ],
+    "notification": {
+      "enabled": false,
+      "sendResponses": ["Red", "Yellow"],
+      "board_name": "Your Review Board"
+    }
   }
 ]

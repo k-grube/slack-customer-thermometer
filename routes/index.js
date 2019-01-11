@@ -5,6 +5,7 @@ const WebClient = require('@slack/client').WebClient;
 const find = require('lodash').find;
 const findIndex = require('lodash').findIndex;
 const path = require('path');
+const ConnectWise = require('connectwise-rest');
 
 const defaultColors = ['#B17657', '#66CC33', '#FFB40D', '#CC3333'];
 const responseTypes = ['Gold', 'Green', 'Yellow', 'Red'];
@@ -28,7 +29,16 @@ if (!token) {
   process.exit(1);
 }
 
-const {CW_COMPANY_URL, CW_COMPANY_ID} = process.env;
+const {CW_COMPANY_URL, CW_COMPANY_ID, CW_PUBLIC_KEY, CW_PRIVATE_KEY} = process.env;
+
+const cwRest = new ConnectWise({
+  companyId: CW_COMPANY_ID,
+  publicKey: CW_PUBLIC_KEY,
+  privateKey: CW_PRIVATE_KEY,
+  companyUrl: CW_COMPANY_URL,
+  timeout: 20000,
+  retry: true,
+});
 
 const slack = new WebClient(token);
 
@@ -151,6 +161,49 @@ router.post('/api/customer-thermometer', (req, res, next) => {
         }
       }
 
+      let responseRating;
+      if (metricConfig.ratings && metricConfig.ratings[response]) {
+        responseRating = metricConfig.ratings[response];
+      }
+
+      // check if we should create a ticket on specific responses
+      // if notification config exists, and notification is enabled,
+      // and sendResponses has members, and board_name is specified
+      if (metricConfig.notification && metricConfig.notification.enabled &&
+        metricConfig.notification.sendResponses &&
+        metricConfig.notification.sendResponses.length > 0 &&
+        metricConfig.notification.board_name) {
+        // search config array for the response type
+        // if it's found, create a review ticket on board_name
+        if (findIndex(metricConfig.notification.sendResponses, el => el === response) !== -1) {
+          cwRest.ServiceDeskAPI.Tickets.createTicket({
+            board: {
+              name: metricConfig.notification.board_name,
+            },
+            company: {
+              identifier: company,
+            },
+            contactEmailLookup: recipient,
+            summary: `New ${type} response ${response}/${responseRating} from ${first_name} ${last_name} at ${company}`,
+            initialDescription: `
+Please review the following ${type === 'thermometer' ? 'Thermometer' : 'Blast'} response.
+Rating: ${response}/${responseRating}
+Ticket: ${ticketId ? `#${ticketId}` : ''}
+Recipient: ${first_name} ${last_name} 
+${recipient}
+Comment:
+${comment && comment.length > 0 ? comment : ''}
+            `,
+          })
+            .then(() => {
+              console.log('Ticket successfully created.');
+            })
+            .catch(err => {
+              console.error('Error creating ticket', err);
+            });
+        }
+      }
+
       if (limitResponse) {
         res.status(200).end();
         return;
@@ -161,11 +214,6 @@ router.post('/api/customer-thermometer', (req, res, next) => {
         responseColor = metricConfig.colors[findIndex(responseTypes, el => el === response)];
       } else {
         responseColor = defaultColors[findIndex(responseTypes, el => el === response)];
-      }
-
-      let responseRating;
-      if (metricConfig.ratings && metricConfig.ratings[response]) {
-        responseRating = metricConfig.ratings[response];
       }
 
       const configSlackChannel = metricConfig.slack_channel.replace(/#/g, '');
