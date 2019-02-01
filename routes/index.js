@@ -36,6 +36,7 @@ const cwRest = new ConnectWise({
   publicKey: CW_PUBLIC_KEY,
   privateKey: CW_PRIVATE_KEY,
   companyUrl: CW_COMPANY_URL,
+  clientId: '62e43497-9238-470e-8756-e9e0d9ecd716',
   timeout: 20000,
   retry: true,
 });

@@ -1,6 +1,6 @@
 {
   "name": "slack-customer-thermometer",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "An express based microservice for proxying Customer Thermometer webhooks to Slack.",
   "keywords": [
     "Slack",
@@ -44,7 +44,7 @@
     "babel-register": "^6.24.1",
     "basic-auth": "^1.1.0",
     "body-parser": "^1.18.3",
-    "connectwise-rest": "0.0.19",
+    "connectwise-rest": "^0.21.0",
     "dotenv": "^4.0.0",
     "errorhandler": "^1.5.0",
     "express": "^4.16.3",
