@@ -119,37 +119,37 @@ router.post('/api/customer-thermometer', (req, res, next) => {
   }
 
   return new Promise((resolve, reject) => {
-    slack.channels.list((err, info) => {
-      if (err) {
-        console.error(err);
-        return reject(
-          new Error('An error has occurred attempting to look up channels.'));
-      }
-      if (!info.channels) {
-        return reject(
-          new Error('No channel definition returned from Slack API.'));
-      }
-      return resolve(info);
-    });
+    // slack.channels.list((err, info) => {
+    //   if (err) {
+    //     console.error(err);
+    //     // return reject(
+    //     //   new Error('An error has occurred attempting to look up channels.'));
+    //   }
+    //   if (!info.channels) {
+    //     console.error('No channel definition returned from Slack API.');
+    //     // return reject(
+    //     //   new Error('No channel definition returned from Slack API.'));
+    //   }
+    //   return resolve(info);
+    // });
+    return resolve();
   })
-    .then(({channels}) => {
-      return new Promise((resolve, reject) => {
-        slack.groups.list((err, info) => {
-          if (err) {
-            return reject(err);
-          }
-          return resolve(channels.concat(info.groups));
-        });
-      });
-    })
+    // .then(({channels}) => {
+    //   return new Promise((resolve, reject) => {
+    //     slack.groups.list((err, info) => {
+    //       if (err) {
+    //         return reject(err);
+    //       }
+    //       return resolve(channels.concat(info.groups));
+    //     });
+    //   });
+    // })
     .then(info => {
       const metricConfig = find(config, {name});
 
       if (!metricConfig) {
-        console.error(
-          `No configuration found matching the metric name: ${name}`);
-        res.status(500)
-          .json({msg: 'No configuration found matching that metric name.'});
+        console.error(`No configuration found matching the metric name: ${name}`);
+        res.status(500).json({msg: 'No configuration found matching that metric name.'});
         return;
       }
 
@@ -205,102 +205,104 @@ ${comment && comment.length > 0 ? comment : ''}
         }
       }
 
-      if (limitResponse) {
-        res.status(200).end();
-        return;
-      }
+      // if (limitResponse) {
+      //   res.status(200).end();
+      //   return;
+      // }
 
-      let responseColor;
-      if (metricConfig.colors) {
-        responseColor = metricConfig.colors[findIndex(responseTypes, el => el === response)];
-      } else {
-        responseColor = defaultColors[findIndex(responseTypes, el => el === response)];
-      }
+      res.status(200).end();
 
-      const configSlackChannel = metricConfig.slack_channel.replace(/#/g, '');
-      const slackChannelDefinition = find(info, {name: configSlackChannel});
-
-      if (!slackChannelDefinition) {
-        console.error(
-          'No matching Slack channel found for this metric\'s definition.');
-        res.status(500)
-          .json(
-            {msg: 'No matching Slack channel found for this metric\'s definition.'});
-        return;
-      }
-
-      console.info(
-        `Posting Slack message to #${configSlackChannel} for ${name}.`);
-
-      const message = {
-        mrkdwn: true,
-        username: 'Customer Thermometer',
-        response_type: 'in_channel',
-        as_user: false,
-        icon_url: 'https://app.customerthermometer.com/images/favicon-196x196.png',
-        attachments: [{
-          fallback: `New ${type} response ${responseRating} from ${first_name} ${last_name} at ${company}.`,
-          thumb_url: responseIconUrl,
-          color: responseColor,
-          fields: [
-            {
-              title: 'Company',
-              value: company,
-              short: true,
-            },
-            {
-              title: 'Recipient',
-              value: recipient,
-              short: true,
-            },
-            {
-              title: type === 'thermometer' ? 'Thermometer' : 'Blast',
-              value: type === 'thermometer' ? thermometer_name : blast_name,
-              short: true,
-            },
-          ],
-        }],
-      };
-
-      if (ticketId && CW_COMPANY_URL) {
-        message.attachments[0].fields.push({
-          title: 'Ticket',
-          /* eslint-disable max-len */
-          value: `<https://${CW_COMPANY_URL}/v4_6_release/services/system_io/router/openrecord.rails?locale=en_US&companyName=${CW_COMPANY_ID}&recordType=ServiceFV&recid=${ticketId}|#${ticketId}>`,
-          short: true,
-        });
-      }
-
-      if (tech) {
-        message.attachments[0].fields.push({
-          title: 'Tech',
-          value: tech,
-          short: true,
-        });
-      }
-
-      if (comment && comment.length > 0) {
-        message.attachments[0].fields.push({
-          title: 'Comment',
-          value: comment,
-          short: false,
-        });
-      }
-
-      slack.chat.postMessage(
-        slackChannelDefinition.id,
-        `New ${type} response *${responseRating}* from ${first_name} ${last_name}.`,
-        message,
-        (err, header, statusCode, body) => {
-          if (err) {
-            // do something
-            console.error('An error has occurred posting to Slack.', err);
-            res.status(500)
-              .json({msg: 'An error has occurred posting to Slack.', err});
-            return;
-          }
-          res.status(200).end();
-        });
+      // let responseColor;
+      // if (metricConfig.colors) {
+      //   responseColor = metricConfig.colors[findIndex(responseTypes, el => el === response)];
+      // } else {
+      //   responseColor = defaultColors[findIndex(responseTypes, el => el === response)];
+      // }
+      //
+      // const configSlackChannel = metricConfig.slack_channel.replace(/#/g, '');
+      // const slackChannelDefinition = find(info, {name: configSlackChannel});
+      //
+      // if (!slackChannelDefinition) {
+      //   console.error(
+      //     'No matching Slack channel found for this metric\'s definition.');
+      //   res.status(500)
+      //     .json(
+      //       {msg: 'No matching Slack channel found for this metric\'s definition.'});
+      //   return;
+      // }
+      //
+      // console.info(
+      //   `Posting Slack message to #${configSlackChannel} for ${name}.`);
+      //
+      // const message = {
+      //   mrkdwn: true,
+      //   username: 'Customer Thermometer',
+      //   response_type: 'in_channel',
+      //   as_user: false,
+      //   icon_url: 'https://app.customerthermometer.com/images/favicon-196x196.png',
+      //   attachments: [{
+      //     fallback: `New ${type} response ${responseRating} from ${first_name} ${last_name} at ${company}.`,
+      //     thumb_url: responseIconUrl,
+      //     color: responseColor,
+      //     fields: [
+      //       {
+      //         title: 'Company',
+      //         value: company,
+      //         short: true,
+      //       },
+      //       {
+      //         title: 'Recipient',
+      //         value: recipient,
+      //         short: true,
+      //       },
+      //       {
+      //         title: type === 'thermometer' ? 'Thermometer' : 'Blast',
+      //         value: type === 'thermometer' ? thermometer_name : blast_name,
+      //         short: true,
+      //       },
+      //     ],
+      //   }],
+      // };
+      //
+      // if (ticketId && CW_COMPANY_URL) {
+      //   message.attachments[0].fields.push({
+      //     title: 'Ticket',
+      //     /* eslint-disable max-len */
+      //     value: `<https://${CW_COMPANY_URL}/v4_6_release/services/system_io/router/openrecord.rails?locale=en_US&companyName=${CW_COMPANY_ID}&recordType=ServiceFV&recid=${ticketId}|#${ticketId}>`,
+      //     short: true,
+      //   });
+      // }
+      //
+      // if (tech) {
+      //   message.attachments[0].fields.push({
+      //     title: 'Tech',
+      //     value: tech,
+      //     short: true,
+      //   });
+      // }
+      //
+      // if (comment && comment.length > 0) {
+      //   message.attachments[0].fields.push({
+      //     title: 'Comment',
+      //     value: comment,
+      //     short: false,
+      //   });
+      // }
+      //
+      // slack.chat.postMessage(
+      //   slackChannelDefinition.id,
+      //   `New ${type} response *${responseRating}* from ${first_name} ${last_name}.`,
+      //   message,
+      //   (err, header, statusCode, body) => {
+      //     if (err) {
+      //       // do something
+      //       console.error('An error has occurred posting to Slack.', err);
+      //       res.status(500)
+      //         .json({msg: 'An error has occurred posting to Slack.', err});
+      //       return;
+      //     }
+      //     res.status(200).end();
+      //   });
     })
     .catch(error => {
       console.error(error);
